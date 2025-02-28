@@ -52,7 +52,7 @@ training_args = GRPOConfig(
     max_prompt_length = 256,
     max_completion_length = 200,
     # num_train_epochs = 1, # Set to 1 for a full training run
-    max_steps = 100,
+    max_steps = 500,
     save_steps = 250,
     max_grad_norm = 0.1,
     report_to = "none", # Can use Weights & Biases
@@ -73,5 +73,5 @@ trainer = GRPOTrainer(
 )
 trainer.train()
 
-model.save_pretrained_merged("phi-4-14b", tokenizer, save_method = "lora",)
-model.push_to_hub_merged("phi-4-14b", tokenizer, save_method = "lora", token = os.getenv("HF_TOKEN"))
+model.save_pretrained_merged("phi-4-14b-500steps", tokenizer, save_method = "lora",)
+model.push_to_hub_merged("phi-4-14b-500steps", tokenizer, save_method = "lora", token = os.getenv("HF_TOKEN"))
