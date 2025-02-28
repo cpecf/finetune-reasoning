@@ -74,7 +74,7 @@ trainer = GRPOTrainer(
 trainer.train()
 
 output_name = os.getenv("BASE_MODEL").split("/")[-1]
-output_name = output_name + "-{n_steps}steps"
+output_name = output_name + f"-{n_steps}steps"
 
 model.save_pretrained_merged(output_name, tokenizer, save_method = "lora",)
 model.push_to_hub_merged(output_name, tokenizer, save_method = "lora", token = os.getenv("HF_TOKEN"))
