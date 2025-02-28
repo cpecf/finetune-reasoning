@@ -10,12 +10,12 @@ import os
 from trl import GRPOConfig, GRPOTrainer
 
 load_dotenv()
-
+n_steps = 500
 max_seq_length = 512 # Can increase for longer reasoning traces
 lora_rank = 16 # Larger rank = smarter, but slower
 
 model, tokenizer = FastLanguageModel.from_pretrained(
-    model_name = "unsloth/Phi-4",
+    model_name = os.getenv("BASE_MODEL"),
     max_seq_length = max_seq_length,
     load_in_4bit = True, # False for LoRA 16bit
     fast_inference = True, # Enable vLLM fast inference
@@ -52,7 +52,7 @@ training_args = GRPOConfig(
     max_prompt_length = 256,
     max_completion_length = 200,
     # num_train_epochs = 1, # Set to 1 for a full training run
-    max_steps = 500,
+    max_steps = n_steps,
     save_steps = 250,
     max_grad_norm = 0.1,
     report_to = "none", # Can use Weights & Biases
@@ -73,5 +73,8 @@ trainer = GRPOTrainer(
 )
 trainer.train()
 
-model.save_pretrained_merged("phi-4-14b-500steps", tokenizer, save_method = "lora",)
-model.push_to_hub_merged("phi-4-14b-500steps", tokenizer, save_method = "lora", token = os.getenv("HF_TOKEN"))
+output_name = os.getenv("BASE_MODEL").split("/")[-1]
+output_name = output_name + "-{n_steps}steps"
+
+model.save_pretrained_merged(output_name, tokenizer, save_method = "lora",)
+model.push_to_hub_merged(output_name, tokenizer, save_method = "lora", token = os.getenv("HF_TOKEN"))
