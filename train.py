@@ -10,7 +10,7 @@ import os
 from trl import GRPOConfig, GRPOTrainer
 
 load_dotenv()
-n_steps = 500
+n_steps = 1
 max_seq_length = 512 # Can increase for longer reasoning traces
 lora_rank = 16 # Larger rank = smarter, but slower
 
